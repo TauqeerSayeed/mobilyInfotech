@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Mobily Infotech Escape Plan</h1>
+    
+    <!-- Information Section -->
+    <p id="info">
+      Hi friends, just provide your In Time and Break Time below, and this tool will calculate the Out Time you need to fulfill 7.5 hours in the office.
+    </p>
+
+    <!-- In Time Input -->
+    <label for="in-time">In Time:</label>
+    <input type="time" id="in-time" name="in-time">
+    
+    <!-- Break Time Input -->
+    <label for="break-time">Break Time (minutes):</label>
+    <input type="number" id="break-time" name="break-time" min="0">
+    
+    <!-- Calculate Button -->
+    <button onclick="calculateOutTime()">Calculate</button>
+    
+    <!-- Result Display -->
+    <div id="result"></div>
+
+    <!-- Footer Section -->
+   <!-- <footer> -->
+    <footer style="text-align: center; padding: 0px; margin-top: 40px; font-size: 14px; color: #090606;">
+    Managed and developed by Tauqeer Sayeed
+  </footer>
+  </div>
+
+  
+
+  <script src="index.js"></script>
+</body>
+</html>
