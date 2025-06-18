@@ -1,11 +1,11 @@
-/* General Reset */
+/* --------------------- General Reset --------------------- */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
   
-  /* Body */
+  /* --------------------- Body --------------------- */
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(to right, #00b09b, #96c93d);
@@ -13,9 +13,11 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: #333;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
   
-  /* Container */
+  /* --------------------- Container --------------------- */
   .container {
     background-color: #fff;
     border-radius: 12px;
@@ -23,15 +25,14 @@
     width: 100%;
     max-width: 400px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    transform: scale(1);
-    transition: transform 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   
   .container:hover {
     transform: scale(1.05);
   }
   
-  /* Header */
+  /* --------------------- Headings & Text --------------------- */
   h1 {
     text-align: center;
     font-size: 24px;
@@ -40,17 +41,15 @@
     font-weight: 600;
   }
   
-  /* Info Paragraph */
   #info {
     font-size: 16px;
     color: #555;
     margin-bottom: 20px;
     text-align: center;
     line-height: 1.6;
-    font-weight: 400;
   }
   
-  /* Labels */
+  /* --------------------- Labels & Inputs --------------------- */
   label {
     display: block;
     font-size: 14px;
@@ -58,33 +57,58 @@
     margin-bottom: 5px;
   }
   
-  /* Input Fields */
-  input {
+  input[type="time"],
+  input[type="number"],
+  select {
     width: 100%;
     padding: 12px;
     margin-bottom: 10px;
     border-radius: 8px;
     border: 2px solid #ddd;
     font-size: 16px;
-    outline: none;
-    transition: all 0.3s ease;
     background-color: #fafafa;
+    transition: all 0.3s ease;
   }
   
-  input:focus {
+  input:focus,
+  select:focus {
     border-color: #00b09b;
     box-shadow: 0 0 5px rgba(0, 176, 155, 0.3);
+    outline: none;
   }
   
-  /* Error Message */
+  /* --------------------- Break Time Group --------------------- */
+  .break-time-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  
+  .break-time-group input {
+    flex: 2;
+    margin: 0;
+  }
+  
+  .break-time-group select {
+    flex: 1;
+    margin: 0;
+    appearance: none;
+    background: url("data:image/svg+xml,%3Csvg fill='gray' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 12px center;
+    background-size: 16px;
+    padding-right: 30px;
+  }
+  
+  /* --------------------- Error Message --------------------- */
   .error-message {
-    color: red;
+    color: #f44336;
     font-size: 13px;
+    margin-top: -5px;
     margin-bottom: 10px;
     display: none;
   }
   
-  /* Button */
+  /* --------------------- Button --------------------- */
   button {
     width: 100%;
     padding: 15px;
@@ -106,7 +130,7 @@
     background-color: #007f6c;
   }
   
-  /* Result Message */
+  /* --------------------- Result Box --------------------- */
   #result {
     margin-top: 20px;
     text-align: center;
@@ -114,33 +138,121 @@
     font-size: 16px;
     padding: 10px;
     border-radius: 8px;
-    color: white;
-    background-color: #00b09b;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }
   
   #result.not-allowed {
     background-color: #f44336;
+    color: white;
   }
   
   #result.allowed {
     background-color: #4CAF50;
+    color: white;
   }
   
-  /* Footer */
-  footer {
+  /* --------------------- Global Footer --------------------- */
+  .global-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #00b09b, #96c93d);
+    color: #fff;
     text-align: center;
-    padding: 15px;
-    margin-top: 20px;
-    font-size: 14px;
-    color: #090404;
-    background-color: #00b09b;
-    border-top: 1px solid #ddd;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    padding: 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    box-shadow: 0 -5px 15px rgba(0, 176, 155, 0.6);
+    transition: background 0.3s ease;
   }
   
-  /* Responsive Design */
+  .global-footer:hover {
+    background: linear-gradient(90deg, #96c93d, #00b09b);
+  }
+  
+  /* --------------------- Top Bar (Dark Mode Button) --------------------- */
+  .top-bar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+  }
+  
+  #dark-mode-toggle {
+    padding: 8px 14px;
+    background-color: #00b09b;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #dark-mode-toggle:hover {
+    background-color: #009a85;
+  }
+  
+  /* --------------------- Dark Mode --------------------- */
+  body.dark-mode {
+    background-color: #121212;
+    color: white;
+  }
+  
+  body.dark-mode .container {
+    background-color: #1e1e1e;
+    color: white;
+  }
+  
+  body.dark-mode input,
+  body.dark-mode select,
+  body.dark-mode button {
+    background-color: #333;
+    color: white;
+    border-color: #555;
+  }
+  
+  body.dark-mode input:focus,
+  body.dark-mode select:focus {
+    border-color: #00b09b;
+    box-shadow: 0 0 5px rgba(0, 176, 155, 0.6);
+  }
+  
+  body.dark-mode button:hover {
+    background-color: #009a85;
+  }
+  
+  body.dark-mode .error-message {
+    color: #ff6b6b;
+  }
+  
+  body.dark-mode .global-footer {
+    background: #1e1e1e;
+    color: white;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  body.dark-mode {
+    background: linear-gradient(to right, #1e1e1e, #121212) !important;
+    color: white;
+  }
+
+  body.dark-mode h1,
+body.dark-mode #info,
+body.dark-mode label {
+  color: white !important;
+}
+
+
+
+  
+
+  
+  
+  /* --------------------- Responsive --------------------- */
   @media (max-width: 600px) {
     .container {
       padding: 20px;
@@ -152,7 +264,9 @@
     }
   
     input,
-    button {
+    button,
+    .break-time-group input,
+    .break-time-group select {
       font-size: 14px;
     }
   

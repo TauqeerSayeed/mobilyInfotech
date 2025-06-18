@@ -6,8 +6,14 @@
   <title>Office Tracker</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
+
 <body>
 
+    <div class="top-bar">
+        <button id="dark-mode-toggle">Dark Mode</button>
+      </div>
+      
   <div class="container">
     <h1>Mobily Infotech Escape Plan</h1>
     
@@ -20,9 +26,20 @@
     <input type="time" id="in-time" name="in-time" />
 
     <!-- Break Time Input -->
-    <label for="break-time">Break Time (minutes):</label>
+    <!-- <label for="break-time">Break Time (minutes):</label>
     <input type="number" id="break-time" name="break-time" min="0" max="480" oninput="validateBreakTime()" />
+    <small id="break-error" class="error-message">Break time cannot exceed 480 minutes (8 hours).</small> -->
+
+    <label for="break-time">Break Time:</label>
+    <div class="break-time-group">
+    <input type="number" id="break-time" name="break-time" min="0" oninput="validateBreakTime()" />
+    <select id="break-unit" onchange="validateBreakTime()">
+    <option value="minutes">Minutes</option>
+    <option value="hours">Hours</option>
+    </select>
+    </div>
     <small id="break-error" class="error-message">Break time cannot exceed 480 minutes (8 hours).</small>
+
 
     <!-- Calculate Button -->
     <button onclick="calculateOutTime()">Calculate</button>
@@ -30,11 +47,15 @@
     <!-- Result Display -->
     <div id="result"></div>
 
-    <!-- Footer -->
+    <!-- Footer
     <footer>
       Managed and developed by Tauqeer Sayeed
-    </footer>
+    </footer> -->
   </div>
+
+  <footer class="global-footer">
+    Managed and developed by Tauqeer Sayeed
+  </footer>
 
   <script src="index.js"></script>
 </body>
