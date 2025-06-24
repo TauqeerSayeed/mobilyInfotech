@@ -66,26 +66,28 @@ function calculateOutTime() {
     return;
   }
 
-  // Calculate required end time
-  const requiredWorkTimeInMillis = 7.5 * 60 * 60 * 1000; // 7.5 hours in milliseconds
-  const inDate = new Date(`2020-01-01T${inTime}:00`); // Use fixed date for time calculations
-  const breakTimeInMillis = breakTime * 60000; // Convert minutes to milliseconds
+  const inDate = new Date(`2020-01-01T${inTime}:00`);
+  const breakTimeInMillis = breakTime * 60000;
 
-  // Add work time and break to in-time
-  const requiredEndTimeInMillis = inDate.getTime() + requiredWorkTimeInMillis + breakTimeInMillis;
-  const requiredEndTime = new Date(requiredEndTimeInMillis);
+  // Define work durations
+  const workDurations = [
+    { label: "7.5 hours", millis: 7.5 * 60 * 60 * 1000 },
+    { label: "8 hours", millis: 8 * 60 * 60 * 1000 }
+  ];
 
-  // Format the result for display
-  let hours = requiredEndTime.getHours();
-  let minutes = requiredEndTime.getMinutes();
-  const period = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12 || 12; // Convert to 12-hour format
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  let outputHTML = "";
 
-  // Show final message
-  const outTimeMessage = `To work 7.5 hours, you need to leave at: ${hours}:${formattedMinutes} ${period}`;
-  resultDiv.textContent = outTimeMessage;
+  workDurations.forEach(work => {
+    const totalMillis = inDate.getTime() + breakTimeInMillis + work.millis;
+    const endTime = new Date(totalMillis);
+    let hours = endTime.getHours();
+    let minutes = endTime.getMinutes();
+    const period = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    outputHTML += `<p>To work ${work.label}, you need to leave at: <strong>${hours}:${formattedMinutes} ${period}</strong></p>`;
+  });
+
+  resultDiv.innerHTML = outputHTML;
   resultDiv.classList.add("allowed");
-
-
 }
