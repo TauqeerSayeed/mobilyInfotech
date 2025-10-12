@@ -1,93 +1,66 @@
-// Dark Mode Toggle
-const toggleBtn = document.getElementById('dark-mode-toggle');
-
-// Toggle dark mode class on body and change button text
-toggleBtn.addEventListener('click', () => {
-  document.body.classList.toggle('dark-mode');
-
-  if (document.body.classList.contains('dark-mode')) {
-    toggleBtn.textContent = 'Light Mode';
-  } else {
-    toggleBtn.textContent = 'Dark Mode';
-  }
-});
-
-// Validate Break Time Input
 function validateBreakTime() {
-  const breakInput = document.getElementById('break-time');
-  const breakUnit = document.getElementById('break-unit').value;
-  const breakError = document.getElementById('break-error');
+  const breakInput = document.getElementById("break-time");
+  const breakUnit = document.getElementById("break-unit").value;
+  const error = document.getElementById("break-error");
 
-  // Get value as float
-  let breakValue = parseFloat(breakInput.value);
+  let breakMinutes =
+    breakUnit === "hours"
+      ? parseFloat(breakInput.value || 0) * 60
+      : parseFloat(breakInput.value || 0);
 
-  // Hide error if value is invalid or empty
-  if (isNaN(breakValue) || breakValue < 0) {
-    breakError.style.display = 'none';
-    return;
-  }
-
-  // Convert to minutes if user entered hours
-  const breakInMinutes = breakUnit === "hours" ? breakValue * 60 : breakValue;
-
-  // Show error if break exceeds 480 minutes (8 hours)
-  if (breakInMinutes > 480) {
-    breakError.style.display = 'block';
+  if (breakMinutes > 480) {
+    error.style.display = "inline";
   } else {
-    breakError.style.display = 'none';
+    error.style.display = "none";
   }
 }
 
-// Main Function to Calculate Out Time
-function calculateOutTime() {
-  const inTime = document.getElementById('in-time').value;
-  const breakTimeRaw = parseFloat(document.getElementById('break-time').value);
-  const breakUnit = document.getElementById('break-unit').value;
-  const resultDiv = document.getElementById('result');
-  const breakError = document.getElementById('break-error');
+function calculateOutTime(hoursToWork) {
+  const inTimeInput = document.getElementById("in-time").value;
+  const breakTimeInput = parseFloat(document.getElementById("break-time").value) || 0;
+  const breakUnit = document.getElementById("break-unit").value;
+  const resultDiv = document.getElementById("result");
 
-  // Reset result area
-  resultDiv.textContent = "";
-  resultDiv.className = "";
-
-  // Validate inputs
-  if (!inTime || isNaN(breakTimeRaw) || breakTimeRaw < 0) {
-    alert("Please fill in all fields correctly.");
+  if (!inTimeInput) {
+    resultDiv.textContent = "Please enter your In Time.";
     return;
   }
 
-  // Convert break time to minutes if needed
-  const breakTime = breakUnit === "hours" ? breakTimeRaw * 60 : breakTimeRaw;
+  // Convert In Time to total minutes
+  const [hours, minutes] = inTimeInput.split(":").map(Number);
+  let totalMinutes = hours * 60 + minutes;
 
-  // Check if break is too long
-  if (breakTime > 480) {
-    breakError.style.display = 'block';
-    alert("Break time cannot exceed 480 minutes (8 hours).");
+  // Convert break time to minutes
+  let breakMinutes = breakUnit === "hours" ? breakTimeInput * 60 : breakTimeInput;
+
+  // Validate break time
+  if (breakMinutes > 480) {
+    document.getElementById("break-error").style.display = "inline";
     return;
+  } else {
+    document.getElementById("break-error").style.display = "none";
   }
 
-  const inDate = new Date(`2020-01-01T${inTime}:00`);
-  const breakTimeInMillis = breakTime * 60000;
+  // Add work hours + break
+  totalMinutes += hoursToWork * 60 + breakMinutes;
 
-  // Define work durations
-  const workDurations = [
-    { label: "7.5 hours", millis: 7.5 * 60 * 60 * 1000 },
-    { label: "8 hours", millis: 8 * 60 * 60 * 1000 }
-  ];
+  // Convert to 12-hour AM/PM format
+  const outHours24 = Math.floor(totalMinutes / 60) % 24;
+  const outMinutes = totalMinutes % 60;
+  const period = outHours24 >= 12 ? "PM" : "AM";
+  const outHours12 = outHours24 % 12 || 12;
 
-  let outputHTML = "";
+  const formattedOutTime = `${String(outHours12).padStart(2, "0")}:${String(outMinutes).padStart(2, "0")} ${period}`;
 
-  workDurations.forEach(work => {
-    const totalMillis = inDate.getTime() + breakTimeInMillis + work.millis;
-    const endTime = new Date(totalMillis);
-    let hours = endTime.getHours();
-    let minutes = endTime.getMinutes();
-    const period = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    outputHTML += `<p>To work ${work.label}, you need to leave at: <strong>${hours}:${formattedMinutes} ${period}</strong></p>`;
-  });
-
-  resultDiv.innerHTML = outputHTML;
+  resultDiv.innerHTML = `<strong>Out Time (${hoursToWork} Hours):</strong> ${formattedOutTime}`;
   resultDiv.classList.add("allowed");
 }
+
+// Dark Mode Toggle
+document.getElementById("dark-mode-toggle").addEventListener("click", function () {
+  const body = document.body;
+  body.classList.toggle("dark-mode");
+
+  // Toggle button text
+  this.textContent = body.classList.contains("dark-mode") ? "☀️ Light Mode" : "🌙 Dark Mode";
+});

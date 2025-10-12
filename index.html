@@ -2,60 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Office Tracker</title>
-  <link rel="icon" href="Favicon.png" type="image/png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Office Out-Time Calculator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-
-
 <body>
+  <!-- Top Bar -->
+  <!-- <div class="top-bar">
+    <button id="dark-mode-toggle">🌙 Dark Mode</button>
+  </div> -->
 
-    <div class="top-bar">
-        <button id="dark-mode-toggle">Dark Mode</button>
-      </div>
-      
+  <div class="top-banner">
+    <p id="fun-message">Work smarter, not longer! 😉 Enter your In Time & Break Time 🕒🏃‍♀️💨 Thanks me later 😉</p>
+  </div>
+
   <div class="container">
     <h1>Mobily Infotech Escape Plan</h1>
-    
-    <p id="info">
-      Hi friends, just provide your In Time and Break Time below, and this tool will calculate the Out Time you need to fulfill 7.5 hours in the office.
-    </p>
+    <!-- <p id="info">
+      Work smarter, not longer! 😉 Enter your In Time & Break Time, and we’ll calculate when your 7.5-hour escape begins! 🕒🏃‍♀️💨
+    </p> -->
 
-    <!-- In Time Input -->
+    <!-- In Time -->
     <label for="in-time">In Time:</label>
-    <input type="time" id="in-time" name="in-time" />
+    <input type="time" id="in-time" required />
 
-    <!-- Break Time Input -->
-    <!-- <label for="break-time">Break Time (minutes):</label>
-    <input type="number" id="break-time" name="break-time" min="0" max="480" oninput="validateBreakTime()" />
-    <small id="break-error" class="error-message">Break time cannot exceed 480 minutes (8 hours).</small> -->
-
+    <!-- Break Time -->
     <label for="break-time">Break Time:</label>
     <div class="break-time-group">
-    <input type="number" id="break-time" name="break-time" min="0" oninput="validateBreakTime()" />
-    <select id="break-unit" onchange="validateBreakTime()">
-    <option value="minutes">Minutes</option>
-    <option value="hours">Hours</option>
-    </select>
+      <input type="number" id="break-time" placeholder="Enter break time" oninput="validateBreakTime()" />
+      <select id="break-unit" onchange="validateBreakTime()">
+        <option value="minutes">Minutes</option>
+        <option value="hours">Hours</option>
+      </select>
     </div>
-    <small id="break-error" class="error-message">Break time cannot exceed 480 minutes (8 hours).</small>
+    <span class="error-message" id="break-error">Break time too long (max 8 hrs)!</span>
 
+    <!-- Buttons -->
+    <div class="button-group">
+      <button onclick="calculateOutTime(6)">😂 Flexi 6h</button>
+      <button onclick="calculateOutTime(7.5)">👍 7.5h</button>
+      <button onclick="calculateOutTime(8)">😔 8h</button>
+    </div>
 
-    <!-- Calculate Button -->
-    <button onclick="calculateOutTime()">Calculate</button>
-
-    <!-- Result Display -->
+    <!-- Result -->
     <div id="result"></div>
-
-    <!-- Footer
-    <footer>
-      Managed and developed by Tauqeer Sayeed
-    </footer> -->
   </div>
 
   <footer class="global-footer">
-    Managed and developed by Tauqeer Sayeed
+    © 2025 | Developed by Tauqeer Sayeed 
   </footer>
 
   <script src="index.js"></script>
