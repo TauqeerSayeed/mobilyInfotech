@@ -27,15 +27,24 @@
     <input type="time" id="in-time" required />
 
     <!-- Break Time -->
-    <label for="break-time">Break Time:</label>
-    <div class="break-time-group">
-      <input type="number" id="break-time" placeholder="Enter break time" oninput="validateBreakTime()" />
-      <select id="break-unit" onchange="validateBreakTime()">
-        <option value="minutes">Minutes</option>
-        <option value="hours">Hours</option>
-      </select>
-    </div>
-    <span class="error-message" id="break-error">Break time too long (max 8 hrs)!</span>
+<label for="break-time">Break Time:</label>
+<div id="break-container">
+  <div class="break-time-group">
+    <input
+      type="number"
+      id="break-time"
+      class="break-input"
+      placeholder="Enter break time"
+      oninput="validateBreakTime()"
+    />
+    <select id="break-unit" onchange="validateBreakTime()">
+      <option value="minutes">Minutes</option>
+      <option value="hours">Hours</option>
+    </select>
+  </div>
+  <button id="add-break" class="add-btn">Add Break Time</button>
+</div>
+<small id="break-error" class="error-message">Break time cannot exceed 480 minutes (8 hours).</small>
 
     <!-- Buttons -->
     <div class="button-group">

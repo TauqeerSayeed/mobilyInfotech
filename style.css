@@ -51,7 +51,102 @@ body {
   margin-top: 60px; /* Adjust for banner height */
 }
 
+/* Add Break Button */
+.add-btn {
+  width: 100%;
+  margin-top: 5px;
+  background-color: #4CAF50;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
+.add-btn:hover {
+  background-color: #45a049;
+}
+
+.remove-btn {
+  background-color: #ff4d4d;
+  border: none;
+  color: white;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-left: 8px;
+}
+
+.remove-btn:hover {
+  background-color: #e63939;
+}
+
+
+/* Make multiple breaks aligned */
+#break-container .break-time-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+#break-container input,
+#break-container select {
+  flex: 1;
+}
+
+/* Adjust for banner */
+/* .container {
+  margin-top: 80px;
+}
+
+.container {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+} */
+
+.container {
+  max-height: 85vh;
+  overflow-y: auto;
+  padding-bottom: calc(4rem + 60px); /* dynamic spacing for footer height */
+  margin-top: 80px;
+}
+
+
+
+
+/* Fix top banner colors */
+.top-banner {
+  width: 100%;
+  background: linear-gradient(90deg, #00b09b, #96c93d);
+  padding: 10px 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1100;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#fun-message {
+  display: inline-block;
+  white-space: nowrap;
+  animation: slide 15s linear infinite;
+  font-weight: 600;
+  color: white;
+  font-size: 16px;
+}
+
+@keyframes slide {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
 
 
 /* Container */
