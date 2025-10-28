@@ -315,6 +315,22 @@ select:focus {
   box-shadow: 0 -5px 15px rgba(0,176,155,0.6);
   transition: background 0.3s ease;
 }
+.linkedin-link {
+  text-decoration: none;
+  color: #ffffff; /* LinkedIn blue */
+  font-weight: 500;
+}
+
+/* .linkedin-link:hover { */
+  /* text-decoration: underline; */
+/* } */
+
+.linkedin-logo {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  filter: brightness(0) saturate(100%) invert(27%) sepia(97%) saturate(7492%) hue-rotate(191deg) brightness(97%) contrast(101%);
+}
 
 .global-footer:hover {
   background: linear-gradient(90deg, #96c93d, #00b09b);

@@ -1,19 +1,21 @@
-// ========== VALIDATE BREAK TIME ==========
+// ========== VALIDATE BREAK TIME (HH:mm:ss) ==========
 function validateBreakTime() {
   const breakInputs = document.querySelectorAll(".break-input");
   const error = document.getElementById("break-error");
-  let totalBreakMinutes = 0;
+  let totalBreakSeconds = 0;
 
   breakInputs.forEach((input) => {
-    const breakUnit = input.nextElementSibling.value;
-    let breakMinutes =
-      breakUnit === "hours"
-        ? parseFloat(input.value || 0) * 60
-        : parseFloat(input.value || 0);
-    totalBreakMinutes += breakMinutes;
+    if (input.value) {
+      const parts = input.value.split(":").map(Number);
+      const h = parts[0] || 0;
+      const m = parts[1] || 0;
+      const s = parts[2] || 0;
+      totalBreakSeconds += h * 3600 + m * 60 + s;
+    }
   });
 
-  if (totalBreakMinutes > 480) {
+  // Limit to 8 hours (28800 seconds)
+  if (totalBreakSeconds > 28800) {
     error.style.display = "inline";
   } else {
     error.style.display = "none";
@@ -28,36 +30,24 @@ document.getElementById("add-break").addEventListener("click", function () {
   breakGroup.classList.add("break-time-group");
 
   const newBreakInput = document.createElement("input");
-  newBreakInput.type = "number";
+  newBreakInput.type = "time";
   newBreakInput.className = "break-input";
-  newBreakInput.placeholder = "Enter break time";
+  newBreakInput.step = "1"; // allow seconds
+   newBreakInput.value = "00:00:00";
   newBreakInput.oninput = validateBreakTime;
 
-  const newBreakSelect = document.createElement("select");
-  newBreakSelect.innerHTML = `
-    <option value="minutes">Minutes</option>
-    <option value="hours">Hours</option>
-  `;
-  newBreakSelect.onchange = validateBreakTime;
-
-  // Create remove button
   const removeBtn = document.createElement("button");
   removeBtn.className = "remove-btn";
   removeBtn.textContent = "❌";
   removeBtn.onclick = function () {
-    breakGroup.remove();      // Remove the entire break group
-    validateBreakTime();      // Recalculate total breaks
+    breakGroup.remove();
+    validateBreakTime();
   };
 
   breakGroup.appendChild(newBreakInput);
-  breakGroup.appendChild(newBreakSelect);
   breakGroup.appendChild(removeBtn);
 
-  // Insert ABOVE the "Add Break" button
   breakContainer.insertBefore(breakGroup, document.getElementById("add-break"));
-
-  // Adjust container height dynamically
-  document.querySelector(".container").style.minHeight = "auto";
 });
 
 // ========== CALCULATE OUT TIME ==========
@@ -70,45 +60,49 @@ function calculateOutTime(hoursToWork) {
     return;
   }
 
-  // Convert In Time to total minutes
-  const [hours, minutes] = inTimeInput.split(":").map(Number);
-  let totalMinutes = hours * 60 + minutes;
+  const inParts = inTimeInput.split(":").map(Number);
+  const inH = inParts[0] || 0;
+  const inM = inParts[1] || 0;
+  const inS = inParts[2] || 0;
+  let totalSeconds = inH * 3600 + inM * 60 + inS;
 
-  // Calculate total break time (including first one)
+  // Calculate total break seconds
   const breakInputs = document.querySelectorAll(".break-input");
-  let totalBreakMinutes = 0;
+  let totalBreakSeconds = 0;
 
   breakInputs.forEach((input) => {
-    const breakUnit = input.nextElementSibling.value;
-    let breakMinutes =
-      breakUnit === "hours"
-        ? parseFloat(input.value || 0) * 60
-        : parseFloat(input.value || 0);
-    totalBreakMinutes += breakMinutes;
+    if (input.value) {
+      const parts = input.value.split(":").map(Number);
+      const h = parts[0] || 0;
+      const m = parts[1] || 0;
+      const s = parts[2] || 0;
+      totalBreakSeconds += h * 3600 + m * 60 + s;
+    }
   });
 
-  // Validate total break
-  if (totalBreakMinutes > 480) {
+  if (totalBreakSeconds > 28800) {
     document.getElementById("break-error").style.display = "inline";
     return;
   } else {
     document.getElementById("break-error").style.display = "none";
   }
 
-  // Add work duration + total breaks
-  totalMinutes += hoursToWork * 60 + totalBreakMinutes;
+  // Add work time + breaks
+  totalSeconds += hoursToWork * 3600 + totalBreakSeconds;
 
-  // Convert back to HH:MM AM/PM
-  const outHours24 = Math.floor(totalMinutes / 60) % 24;
-  const outMinutes = totalMinutes % 60;
+  // Convert back to HH:mm:ss 12-hour format
+  const outHours24 = Math.floor(totalSeconds / 3600) % 24;
+  const outMinutes = Math.floor((totalSeconds % 3600) / 60);
+  const outSeconds = Math.floor(totalSeconds % 60);
   const period = outHours24 >= 12 ? "PM" : "AM";
   const outHours12 = outHours24 % 12 || 12;
+
   const formattedOutTime = `${String(outHours12).padStart(2, "0")}:${String(
     outMinutes
-  ).padStart(2, "0")} ${period}`;
+  ).padStart(2, "0")}:${String(outSeconds).padStart(2, "0")} ${period}`;
 
   resultDiv.innerHTML = `
     <strong>Out Time (${hoursToWork} Hours):</strong> ${formattedOutTime} <br>
-    <small>Total Break: ${totalBreakMinutes} minutes</small>
+    <small>Total Break: ${Math.floor(totalBreakSeconds / 60)} min ${totalBreakSeconds % 60} sec</small>
   `;
 }
