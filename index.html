@@ -3,60 +3,132 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mobily Infotech</title>
+  <title>Mobily Infotech Escape Plan</title>
+
+  <!-- TailwindCSS + Fonts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563eb",
+            "primary-light": "#dbeafe",
+            background: "#f8fafc",
+            "text-primary": "#1e293b",
+            "text-secondary": "#64748b",
+            "border-color": "#e2e8f0",
+          },
+          fontFamily: { display: ["Inter", "sans-serif"] },
+        },
+      },
+    };
+  </script>
 </head>
-<body>
 
-  <div class="top-banner">
-    <p id="fun-message">Work smarter, not longer! 😉 Enter your In Time & Break Time 🕒🏃‍♀️💨 Thanks me later 😉</p>
-  </div>
+<body class="bg-gradient font-display text-text-primary min-h-screen flex flex-col overflow-y-auto">
 
-  <div class="container">
-    <h1>Mobily Infotech Escape Plan</h1>
+  <!-- Header -->
+  <header class="flex items-center gap-2 p-3 sm:p-4">
+    <div class="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary-light text-primary">
+      <span class="material-symbols-outlined !text-xl sm:!text-2xl">schedule</span>
+    </div>
+    <div>
+      <h1 class="text-base sm:text-lg font-bold text-text-primary leading-tight">Mobily Infotech Escape Plan</h1>
+      <p class="text-[11px] sm:text-xs text-text-secondary">Work smarter not harder</p>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex-grow px-3 sm:px-4 py-2 space-y-3 max-w-md mx-auto w-full">
 
     <!-- In Time -->
-    <label for="in-time">In Time:</label>
-    <input type="time" id="in-time" step="1" required /> <!-- UPDATED: Added step="1" for seconds -->
+    <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg">
+      <h2 class="text-sm sm:text-base font-semibold mb-1 text-blue-700">In Time</h2>
+      <div class="flex items-stretch">
+        <input type="time" id="in-time" step="1" required
+          class="form-input h-10 flex-1 rounded-l-md border border-border-color bg-white px-2 text-sm text-text-primary focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"/>
+        <!-- <div class="flex items-center justify-center rounded-r-md border border-l-0 border-border-color bg-white px-2 text-text-secondary">
+          <span class="material-symbols-outlined text-sm">access_time</span>
+        </div> -->
+      </div>
+    </section>
 
-    <label for="break-time">Break Time (HH:mm:ss):</label>
-<div id="break-container">
-  <div class="break-time-group">
-    <input
-      type="time"
-      id="break-time"
-      class="break-input"
-      step="1"
-      oninput="validateBreakTime()"
-      value="00:00:00"
-    />
-  </div>
-  <button id="add-break" class="add-btn">Add Break Time</button>
-</div>
-<small id="break-error" class="error-message">Break time cannot exceed 8 hours.</small>
+    <!-- Break Time -->
+    <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg">
+      <h2 class="text-sm sm:text-base font-semibold mb-1 text-blue-700">Break Time</h2>
+      <div id="break-container" class="flex flex-col gap-2">
+        <div class="break-time-group flex items-center gap-2">
+          <input type="text" id="break-time"
+            class="break-input flex-1 rounded-md border border-border-color bg-white px-2 py-1.5 text-sm text-text-primary placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"
+            placeholder="e.g. 45 or 00:45:00 or 1:30" inputmode="numeric" />
+        </div>
+        <button id="add-break"
+          class="flex h-9 w-full items-center justify-center gap-1.5 rounded-md bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-indigo-600 hover:to-blue-600 transition text-sm font-medium shadow-md">
+          <span class="material-symbols-outlined text-sm">add</span>Add Break
+        </button>
+      </div>
+      <small id="break-error" class="text-xs text-red-500 hidden mt-1 block">Break time cannot exceed 8 hours.</small>
+    </section>
 
-    <!-- Buttons -->
-    <div class="button-group">
-      <button onclick="calculateOutTime(6)">😂 Flexi 6h</button>
-      <button onclick="calculateOutTime(7.5)">👍 7.5h</button>
-      <button onclick="calculateOutTime(8)">😔 8h</button>
-    </div>
+    <!-- Work Hours -->
+    <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg">
+      <h2 class="text-sm sm:text-base font-semibold mb-1 text-blue-700">Total Work Hours</h2>
+      <div class="flex gap-1 sm:gap-2 h-auto items-center justify-center bg-slate-100 rounded-lg p-1">
+        <button onclick="calculateOutTime(6)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-500 hover:to-blue-600 hover:text-white transition-all">😂 6h</button>
+        <button onclick="calculateOutTime(7.5)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-indigo-500 hover:to-blue-500 hover:text-white transition-all">👍 7.5h</button>
+        <button onclick="calculateOutTime(8)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-400 hover:to-blue-500 hover:text-white transition-all">😔 8h</button>
+      </div>
+    </section>
 
     <!-- Result -->
-    <div id="result"></div>
-  </div>
+    <section id="result-section">
+      <div id="result" class="fade-card flex flex-col items-center justify-center text-center bg-white border border-slate-200 rounded-xl p-5 shadow-card backdrop-blur-lg">
+        <p class="text-xs sm:text-sm text-slate-600 mb-1">Your Out-Time is</p>
+        <p class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">--:-- --</p>
+        <div class="mt-2 rounded-full bg-primary-light px-3 py-1 text-xs text-primary">
+          <span>Total Break:</span>
+          <span class="font-semibold">0 min</span>
+        </div>
+      </div>
+    </section>
 
-  <footer class="global-footer">
-  <span class="divider"></span>
-  <a href="https://www.linkedin.com/in/tauqeer-sayeed" target="_blank" class="linkedin-link">
-    <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn" class="linkedin-logo">
-    <!-- <span class="linkedin-text">Let's Connect on <strong>LinkedIn</strong></span> -->
-  </a>
-  | © 2025 | Developed by Tauqeer Sayeed 
-  
+  </main>
+
+<!-- Footer -->
+<footer class="text-center py-6 mt-10 text-sm sm:text-base font-medium tracking-wide">
+  <p class="text-gray-600">
+    Developed by 
+    <span class="font-semibold text-blue-700 hover:text-indigo-600 transition-colors duration-300">
+      Tauqeer Sayeed
+    </span> 
+    © 2025
+  </p>
+  <p class="text-xs text-gray-400 mt-1 italic">
+    “Work smarter, not harder.”
+  </p>
 </footer>
 
-  
+
+  <!-- <div class="flex justify-center items-center space-x-5">
+    <a href="https://www.linkedin.com/in/tauqeer-sayeed" 
+       target="_blank" 
+       class="text-white/80 hover:text-white transition-transform transform hover:scale-110">
+      <i class="fab fa-linkedin-in text-lg"></i>
+    </a>
+    <a href="https://www.instagram.com/tauqeer_sayeed/" 
+       target="_blank" 
+       class="text-white/80 hover:text-white transition-transform transform hover:scale-110">
+      <i class="fab fa-instagram text-lg"></i>
+    </a>
+  </div> -->
+<!-- </footer> -->
+
   <script src="index.js"></script>
 </body>
 </html>
