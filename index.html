@@ -37,18 +37,50 @@
 <div id="toast-container" class="fixed top-6 left-0 right-0 z-[9999] flex justify-center pointer-events-none"></div>
 
 
-  <!-- Header -->
-  <header class="flex items-center gap-2 p-3 sm:p-4">
+<!-- Header -->
+<header class="flex items-center justify-between p-3 sm:p-4">
+
+  <!-- Left: Logo + Title -->
+  <div class="flex items-center gap-2">
     <div class="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary-light text-primary">
       <span class="material-symbols-outlined !text-xl sm:!text-2xl">schedule</span>
     </div>
     <div>
-      <h1 class="text-base sm:text-lg font-bold text-text-primary leading-tight">Mobily Infotech Escape Plan</h1>
+      <h1 class="text-base sm:text-lg font-bold text-text-primary leading-tight">
+        Mobily Infotech Escape Plan
+      </h1>
       <p class="text-[11px] sm:text-xs text-text-secondary">Work smarter not harder</p>
     </div>
-  </header>
+  </div>
 
-  <div id="feature-banner" 
+  <!-- Right: LinkedIn Button (visible on all screens including phone) -->
+  <a 
+    href="https://www.linkedin.com/in/tauqeer-sayeed" 
+    target="_blank"
+    class="flex items-center gap-1 
+           bg-[#0A66C2] 
+           text-white 
+           px-3 py-1.5 
+           rounded-full 
+           font-semibold 
+           text-xs 
+           shadow-md 
+           transition-all 
+           duration-200 
+           
+           hover:bg-[#0A66C2]
+           hover:text-white
+           hover:opacity-100
+           hover:shadow-xl 
+           hover:-translate-y-0.5
+  ">
+    <i class="fab fa-linkedin-in text-sm"></i>
+    <span class="hidden sm:inline">Tauqeer Sayeed</span>
+  </a>
+
+</header>
+
+<div id="feature-banner" 
      class="mx-3 sm:mx-auto max-w-md mt-2 p-3 rounded-xl bg-blue-100 text-blue-700 font-medium shadow-md flex items-center justify-between animate-fade-in">
   <span>✨ New feature added: Smart Toast Alerts!</span>
   <button onclick="dismissBanner()" class="text-blue-700 font-bold ml-3">✕</button>
@@ -126,7 +158,7 @@
   </p> -->
 
   <!-- Connect Section -->
-  <div class="flex justify-center items-center gap-3 mt-2">
+  <!-- <div class="flex justify-center items-center gap-3 mt-2">
     <a 
       href="https://www.linkedin.com/in/tauqeer-sayeed" 
       target="_blank"
@@ -150,7 +182,7 @@
       <i class="fab fa-linkedin-in text-base"></i>
       Connect with me
     </a>
-  </div>
+  </div> -->
 </footer>
 
 
