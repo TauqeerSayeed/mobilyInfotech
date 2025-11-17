@@ -1,3 +1,68 @@
+// ========== TOASTER UI ==========
+
+// Add toast container automatically if missing
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.getElementById("toast-container")) {
+    const div = document.createElement("div");
+    div.id = "toast-container";
+    div.className = "fixed top-4 right-4 z-[9999] space-y-3";
+    document.body.appendChild(div);
+  }
+});
+
+// ========== ADVANCED TOP TOAST SYSTEM ==========
+function showToast(message, type = "info") {
+  const container = document.getElementById("toast-container");
+
+  // Clear previous toast
+  container.innerHTML = "";
+
+  // Icon based on type
+  const icons = {
+    success: "✔️",
+    error: "❌",
+    warning: "⚠️",
+    info: "ℹ️"
+  };
+
+  // Colors based on type
+  const bgColors = {
+    success: "bg-green-600",
+    error: "bg-red-600",
+    warning: "bg-yellow-600 text-black",
+    info: "bg-blue-600"
+  };
+
+  // Toast element
+  const toast = document.createElement("div");
+  toast.className = `
+    ${bgColors[type]} 
+    flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white 
+    animate-toast-down pointer-events-auto relative w-[90%] max-w-sm
+  `;
+
+  toast.innerHTML = `
+    <span class="text-xl">${icons[type]}</span>
+    <span class="text-sm font-medium flex-1">${message}</span>
+    <div class="absolute bottom-0 left-0 h-[3px] bg-white/60 animate-progress w-full"></div>
+  `;
+
+  container.appendChild(toast);
+
+  // Vibrate on mobile if supported
+  if (navigator.vibrate) {
+    navigator.vibrate(50);
+  }
+
+  // Auto remove
+  setTimeout(() => {
+    toast.classList.add("animate-toast-up");
+    setTimeout(() => toast.remove(), 300);
+  }, 2600);
+}
+
+
+
 // ========== HELPER: PARSE BREAK INPUT (flexible formats) ==========
 function parseBreakToSeconds(raw) {
   if (!raw && raw !== "0") return NaN;
@@ -18,6 +83,8 @@ function parseBreakToSeconds(raw) {
   }
   return NaN;
 }
+
+
 
 // ========== VALIDATE BREAK TIME ==========
 function validateBreakTime() {
@@ -54,7 +121,9 @@ function validateBreakTime() {
   }
 }
 
-// ========== ADD NEW BREAK INPUT (Animated) ==========
+
+
+// ========== ADD NEW BREAK INPUT ==========
 document.getElementById("add-break").addEventListener("click", function () {
   const breakContainer = document.getElementById("break-container");
 
@@ -84,18 +153,23 @@ document.getElementById("add-break").addEventListener("click", function () {
   validateBreakTime();
 });
 
-// ========== CALCULATE OUT TIME ==========
+
+
+// ========== CALCULATE OUT TIME WITH TOAST ==========
 function calculateOutTime(hoursToWork) {
   const inTimeInput = document.getElementById("in-time").value;
   const resultDiv = document.getElementById("result");
+
   if (!inTimeInput) {
-    resultDiv.innerHTML = `<p>Please enter your In Time.</p>`;
+    showToast("Please enter your In Time.", "error");
     return;
   }
   if (!validateBreakTime()) return;
 
   const [inH, inM, inS = 0] = inTimeInput.split(":").map(Number);
-  let totalSeconds = inH * 3600 + inM * 60 + inS;
+
+  const inDate = new Date();
+  inDate.setHours(inH, inM, inS, 0);
 
   let totalBreakSeconds = 0;
   document.querySelectorAll(".break-input").forEach(input => {
@@ -103,6 +177,23 @@ function calculateOutTime(hoursToWork) {
     if (!Number.isNaN(seconds)) totalBreakSeconds += seconds;
   });
 
+  const targetOut = new Date(inDate.getTime() + (hoursToWork * 3600 * 1000) + (totalBreakSeconds * 1000));
+
+  const now = new Date();
+  let diffMs = targetOut - now;
+
+  if (diffMs > 0) {
+    const diffSec = Math.floor(diffMs / 1000);
+    const hrs = Math.floor(diffSec / 3600);
+    const mins = Math.floor((diffSec % 3600) / 60);
+
+    showToast(`⏳ You still need ${hrs} hr ${mins} min to complete ${hoursToWork} hours.`, "info");
+
+  } else {
+    showToast("🎉 You already completed your hours — go now leave!", "success");
+  }
+
+  let totalSeconds = inH * 3600 + inM * 60 + inS;
   totalSeconds += hoursToWork * 3600 + totalBreakSeconds;
 
   const outHours24 = Math.floor(totalSeconds / 3600) % 24;
@@ -110,7 +201,8 @@ function calculateOutTime(hoursToWork) {
   const period = outHours24 >= 12 ? "PM" : "AM";
   const outHours12 = outHours24 % 12 || 12;
 
-  const formattedOutTime = `${String(outHours12).padStart(2, "0")}:${String(outMinutes).padStart(2, "0")} ${period}`;
+  const formattedOutTime =
+    `${String(outHours12).padStart(2, "0")}:${String(outMinutes).padStart(2, "0")} ${period}`;
 
   resultDiv.innerHTML = `
     <div class="fade-card flex flex-col items-center justify-center text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-card">
@@ -123,3 +215,18 @@ function calculateOutTime(hoursToWork) {
     </div>
   `;
 }
+
+
+function dismissBanner() {
+  const banner = document.getElementById("feature-banner");
+  banner.classList.remove("animate-fade-in");
+  banner.classList.add("animate-fade-out");
+
+  setTimeout(() => {
+    banner.remove();
+  }, 400);
+}
+
+// Auto-hide after 5 seconds (optional)
+setTimeout(() => dismissBanner(), 5000);
+

@@ -33,6 +33,10 @@
 
 <body class="bg-gradient font-display text-text-primary min-h-screen flex flex-col overflow-y-auto">
 
+
+<div id="toast-container" class="fixed top-6 left-0 right-0 z-[9999] flex justify-center pointer-events-none"></div>
+
+
   <!-- Header -->
   <header class="flex items-center gap-2 p-3 sm:p-4">
     <div class="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-primary-light text-primary">
@@ -43,6 +47,13 @@
       <p class="text-[11px] sm:text-xs text-text-secondary">Work smarter not harder</p>
     </div>
   </header>
+
+  <div id="feature-banner" 
+     class="mx-3 sm:mx-auto max-w-md mt-2 p-3 rounded-xl bg-blue-100 text-blue-700 font-medium shadow-md flex items-center justify-between animate-fade-in">
+  <span>✨ New feature added: Smart Toast Alerts!</span>
+  <button onclick="dismissBanner()" class="text-blue-700 font-bold ml-3">✕</button>
+</div>
+
 
   <!-- Main -->
   <main class="flex-grow px-3 sm:px-4 py-2 space-y-3 max-w-md mx-auto w-full">
@@ -101,34 +112,49 @@
   </main>
 
 <!-- Footer -->
-<footer class="text-center py-6 mt-10 text-sm sm:text-base font-medium tracking-wide">
-  <p class="text-gray-600">
+<footer>
+  <p>
     Developed by 
     <span class="font-semibold text-blue-700 hover:text-indigo-600 transition-colors duration-300">
       Tauqeer Sayeed
     </span> 
     © 2025
   </p>
-  <p class="text-xs text-gray-400 mt-1 italic">
+
+  <!-- <p class="text-xs italic text-gray-500 mb-2">
     “Work smarter, not harder.”
-  </p>
+  </p> -->
+
+  <!-- Connect Section -->
+  <div class="flex justify-center items-center gap-3 mt-2">
+    <a 
+      href="https://www.linkedin.com/in/tauqeer-sayeed" 
+      target="_blank"
+      class="flex items-center gap-2 
+             bg-[#0A66C2] 
+             text-white 
+             px-4 py-2 
+             rounded-full 
+             font-semibold 
+             text-sm 
+             shadow-md 
+             transition-all 
+             duration-200 
+             
+             hover:bg-[#0A66C2]        /* KEEP SAME COLOR */
+             hover:text-white          /* KEEP TEXT COLOR SAME */
+             hover:opacity-100         /* FULL VISIBLE */
+             hover:shadow-xl 
+             hover:-translate-y-0.5
+    ">
+      <i class="fab fa-linkedin-in text-base"></i>
+      Connect with me
+    </a>
+  </div>
 </footer>
 
 
-  <!-- <div class="flex justify-center items-center space-x-5">
-    <a href="https://www.linkedin.com/in/tauqeer-sayeed" 
-       target="_blank" 
-       class="text-white/80 hover:text-white transition-transform transform hover:scale-110">
-      <i class="fab fa-linkedin-in text-lg"></i>
-    </a>
-    <a href="https://www.instagram.com/tauqeer_sayeed/" 
-       target="_blank" 
-       class="text-white/80 hover:text-white transition-transform transform hover:scale-110">
-      <i class="fab fa-instagram text-lg"></i>
-    </a>
-  </div> -->
-<!-- </footer> -->
 
-  <script src="index.js"></script>
+<script src="index.js"></script>
 </body>
 </html>
