@@ -228,5 +228,5 @@ function dismissBanner() {
 }
 
 // Auto-hide after 5 seconds (optional)
-setTimeout(() => dismissBanner(), 5000);
+// setTimeout(() => dismissBanner(), 5000);
 
