@@ -194,7 +194,7 @@ function calculateOutTime(hoursToWork) {
     const mins = Math.floor((diffSec % 3600) / 60);
     const formattedWorkHours = formatHours(hoursToWork);
 
-    showToast(`⏳ You still need ${hrs} hr ${mins} min to complete ${formattedWorkHours} hours.`, "info");
+    showToast(`⏳ You still need ${hrs} hr ${mins} min to complete ${formattedWorkHours}.`, "info");
 
   } else {
     showToast("🎉 You already completed your hours — go now leave!", "success");
