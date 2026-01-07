@@ -154,6 +154,12 @@ document.getElementById("add-break").addEventListener("click", function () {
 });
 
 
+function formatHours(hoursDecimal) {
+  const hrs = Math.floor(hoursDecimal);
+  const mins = Math.round((hoursDecimal - hrs) * 60);
+  return `${hrs}h ${mins}m`;
+}
+
 
 // ========== CALCULATE OUT TIME WITH TOAST ==========
 function calculateOutTime(hoursToWork) {
@@ -186,8 +192,9 @@ function calculateOutTime(hoursToWork) {
     const diffSec = Math.floor(diffMs / 1000);
     const hrs = Math.floor(diffSec / 3600);
     const mins = Math.floor((diffSec % 3600) / 60);
+    const formattedWorkHours = formatHours(hoursToWork);
 
-    showToast(`⏳ You still need ${hrs} hr ${mins} min to complete ${hoursToWork} hours.`, "info");
+    showToast(`⏳ You still need ${hrs} hr ${mins} min to complete ${formattedWorkHours} hours.`, "info");
 
   } else {
     showToast("🎉 You already completed your hours — go now leave!", "success");
