@@ -234,6 +234,61 @@ function dismissBanner() {
   }, 400);
 }
 
+
+// ========== COMPLETED TILL NOW ==========
+function calculateCompletedTillNow() {
+  const inTimeInput = document.getElementById("in-time").value;
+  if (!inTimeInput) {
+    showToast("Please enter your In Time.", "error");
+    return;
+  }
+  if (!validateBreakTime()) return;
+
+  const [inH, inM, inS = 0] = inTimeInput.split(":").map(Number);
+
+  const inDate = new Date();
+  inDate.setHours(inH, inM, inS, 0);
+
+  let totalBreakSeconds = 0;
+  document.querySelectorAll(".break-input").forEach(input => {
+    const sec = parseBreakToSeconds(input.value);
+    if (!Number.isNaN(sec)) totalBreakSeconds += sec;
+  });
+
+  const now = new Date();
+  let workedSeconds = (now - inDate) / 1000 - totalBreakSeconds;
+
+  if (workedSeconds <= 0) {
+    showToast("You haven't completed any work yet.", "warning");
+    return;
+  }
+
+  const hrs = Math.floor(workedSeconds / 3600);
+  const mins = Math.floor((workedSeconds % 3600) / 60);
+
+  showToast(`✅ You have completed ${hrs} hr ${mins} min so far.`, "success");
+}
+
+
+// ========== CUSTOM HOURS ==========
+function calculateCustomHours() {
+  const h = parseInt(document.getElementById("custom-hours").value || 0);
+  const m = parseInt(document.getElementById("custom-minutes").value || 0);
+
+  if (h === 0 && m === 0) {
+    showToast("Please enter custom hours or minutes.", "error");
+    return;
+  }
+  if (m >= 60) {
+    showToast("Minutes must be less than 60.", "warning");
+    return;
+  }
+
+  const decimalHours = h + m / 60;
+  calculateOutTime(decimalHours);
+}
+
+
 // Auto-hide after 5 seconds (optional)
 // setTimeout(() => dismissBanner(), 5000);
 

@@ -82,7 +82,7 @@
 
 <div id="feature-banner" 
      class="mx-3 sm:mx-auto max-w-md mt-2 p-3 rounded-xl bg-blue-100 text-blue-700 font-medium shadow-md flex items-center justify-between animate-fade-in">
-  <span>7.5hours means Half day now, Be careful!😊 </span>
+  <span>Feat :Custom calculation added!Check it out😊 </span>
   <button onclick="dismissBanner()" class="text-blue-700 font-bold ml-3">✕</button>
 </div>
 
@@ -128,6 +128,55 @@
         <button onclick="calculateOutTime(8)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-400 hover:to-blue-500 hover:text-white transition-all">👍8h</button>
       </div>
     </section>
+
+    <!-- Extra Options -->
+<section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg space-y-3">
+<h2 class="text-sm sm:text-base font-semibold mb-1 text-blue-700">Custom Calculation</h2>
+  <!-- Completed till now -->
+  <button
+    onclick="calculateCompletedTillNow()"
+    class="w-full h-10 rounded-md text-sm font-semibold 
+           bg-gradient-to-r from-emerald-400 to-green-500 
+           text-white hover:from-emerald-500 hover:to-green-600 transition">
+    ⏱ Completed till now
+  </button>
+
+  <!-- Custom hours -->
+  <!-- Custom hours -->
+<div class="flex gap-2 w-full box-border">
+  <input
+    id="custom-hours"
+    type="number"
+    min="0"
+    placeholder="Hours"
+    class="w-20 h-10 rounded-md border border-border-color px-3 text-sm 
+           focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"
+  />
+
+  <input
+    id="custom-minutes"
+    type="number"
+    min="0"
+    max="59"
+    placeholder="Minutes"
+    class="w-20 h-10 rounded-md border border-border-color px-3 text-sm 
+           focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"
+  />
+
+  <button
+    onclick="calculateCustomHours()"
+    class="flex-1 h-10 rounded-md 
+           bg-gradient-to-r from-purple-500 to-indigo-500 
+           text-white text-sm font-semibold 
+           hover:from-purple-600 hover:to-indigo-600 
+           transition whitespace-nowrap">
+    Calculate
+  </button>
+</div>
+
+
+</section>
+
 
     <!-- Result -->
     <section id="result-section">
