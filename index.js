@@ -124,35 +124,101 @@ function validateBreakTime() {
 
 
 // ========== ADD NEW BREAK INPUT ==========
-document.getElementById("add-break").addEventListener("click", function () {
+// ========== BREAK INPUT SYSTEM (Button + Enter + Backspace) ==========
+
+document.addEventListener("DOMContentLoaded", function () {
+
   const breakContainer = document.getElementById("break-container");
+  const addBreakBtn = document.getElementById("add-break");
 
-  const breakGroup = document.createElement("div");
-  breakGroup.classList.add("break-time-group", "flex", "items-center", "gap-2");
+  // Function to attach keyboard events
+  function attachInputEvents(input) {
 
-  const newBreakInput = document.createElement("input");
-  newBreakInput.type = "text";
-  newBreakInput.className =
-    "break-input flex-1 rounded-lg border border-border-color bg-white px-3 py-2 sm:py-3 text-sm sm:text-base text-text-primary placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none";
-  newBreakInput.placeholder = "e.g. 45 or 00:45:00 or 1:30";
-  newBreakInput.inputMode = "numeric";
-  newBreakInput.oninput = validateBreakTime;
+    // Validate while typing
+    input.addEventListener("input", validateBreakTime);
 
-  const removeBtn = document.createElement("button");
-  removeBtn.className =
-    "remove-btn flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition";
-  removeBtn.innerHTML = '<span class="material-symbols-outlined text-base sm:text-lg">remove</span>';
-  removeBtn.onclick = () => {
-    breakGroup.style.animation = "fadeSlideIn 0.3s reverse ease-out";
-    setTimeout(() => breakGroup.remove(), 250);
-  };
+    input.addEventListener("keydown", function (e) {
 
-  breakGroup.appendChild(newBreakInput);
-  breakGroup.appendChild(removeBtn);
-  breakContainer.insertBefore(breakGroup, document.getElementById("add-break"));
-  validateBreakTime();
+      // 🔥 ENTER → Add new input
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const newInputGroup = createBreakInput();
+        breakContainer.insertBefore(newInputGroup, addBreakBtn);
+        newInputGroup.querySelector("input").focus();
+      }
+
+      // 🔥 BACKSPACE on empty → Remove input (except first)
+      if (e.key === "Backspace" && input.value === "") {
+        const allGroups = document.querySelectorAll(".break-time-group");
+
+        if (allGroups.length > 1) {
+          e.preventDefault();
+
+          const group = input.closest(".break-time-group");
+          const prev = group.previousElementSibling;
+
+          group.remove();
+
+          if (prev) {
+            const prevInput = prev.querySelector("input");
+            if (prevInput) prevInput.focus();
+          }
+        }
+      }
+
+    });
+  }
+
+  // Function to create new break input group
+  function createBreakInput() {
+
+    const breakGroup = document.createElement("div");
+    breakGroup.classList.add("break-time-group", "flex", "items-center", "gap-2");
+
+    const newBreakInput = document.createElement("input");
+    newBreakInput.type = "text";
+    newBreakInput.className =
+      "break-input flex-1 rounded-lg border border-border-color bg-white px-3 py-2 sm:py-3 text-sm sm:text-base text-text-primary placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none";
+    newBreakInput.placeholder = "e.g. 45 or 00:45:00 or 1:30";
+    newBreakInput.inputMode = "numeric";
+
+    attachInputEvents(newBreakInput);
+
+    // Remove button
+    const removeBtn = document.createElement("button");
+    removeBtn.className =
+      "remove-btn flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition";
+
+    removeBtn.innerHTML =
+      '<span class="material-symbols-outlined text-base sm:text-lg">remove</span>';
+
+    removeBtn.onclick = () => {
+      const allGroups = document.querySelectorAll(".break-time-group");
+
+      if (allGroups.length > 1) {
+        breakGroup.remove();
+      }
+    };
+
+    breakGroup.appendChild(newBreakInput);
+    breakGroup.appendChild(removeBtn);
+
+    return breakGroup;
+  }
+
+  // Button click → Add break
+  addBreakBtn.addEventListener("click", function () {
+    const newInputGroup = createBreakInput();
+    breakContainer.insertBefore(newInputGroup, addBreakBtn);
+    newInputGroup.querySelector("input").focus();
+  });
+
+  // Attach events to existing first input
+  document.querySelectorAll(".break-input").forEach(input => {
+    attachInputEvents(input);
+  });
+
 });
-
 
 function formatHours(hoursDecimal) {
   const hrs = Math.floor(hoursDecimal);

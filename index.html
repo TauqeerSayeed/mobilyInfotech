@@ -120,14 +120,84 @@
     </section>
 
     <!-- Work Hours -->
-    <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg">
+    <!-- <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg">
       <h2 class="text-sm sm:text-base font-semibold mb-1 text-blue-700">Total Work Hours</h2>
       <div class="flex gap-1 sm:gap-2 h-auto items-center justify-center bg-slate-100 rounded-lg p-1">
         <button onclick="calculateOutTime(4.5)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-500 hover:to-blue-600 hover:text-white transition-all">😂4h 30m</button>
         <button onclick="calculateOutTime(8.25)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-indigo-500 hover:to-blue-500 hover:text-white transition-all">😔8h 15m</button>
         <button onclick="calculateOutTime(8)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-400 hover:to-blue-500 hover:text-white transition-all">👍8h</button>
+        <button onclick="calculateOutTime(6)" class="flex-1 h-8 sm:h-10 rounded-md text-xs sm:text-sm font-medium text-slate-700 bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-400 hover:to-blue-500 hover:text-white transition-all">Ramadan(6h)</button>
       </div>
-    </section>
+    </section> -->
+
+    <section class="rounded-2xl border border-border-color bg-white/90 p-5 shadow-card backdrop-blur-lg">
+  
+  <h2 class="text-sm sm:text-base font-semibold mb-4 text-blue-700 text-center tracking-wide">
+    Total Work Hours
+  </h2>
+
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- 4h 30m -->
+    <button onclick="calculateOutTime(4.5)"
+      class="group relative h-12 rounded-2xl 
+             bg-gradient-to-br from-blue-100 to-blue-200 
+             text-blue-800 font-semibold text-sm
+             shadow-md 
+             transition-all duration-300 
+             hover:shadow-xl hover:-translate-y-1 
+             active:scale-95">
+
+      <span class="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition"></span>
+      😂 4h 30m
+    </button>
+
+    <!-- 8h 15m -->
+    <button onclick="calculateOutTime(8.25)"
+      class="group relative h-12 rounded-2xl 
+             bg-gradient-to-br from-indigo-100 to-blue-200 
+             text-indigo-800 font-semibold text-sm
+             shadow-md 
+             transition-all duration-300 
+             hover:shadow-xl hover:-translate-y-1 
+             active:scale-95">
+
+      <span class="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition"></span>
+      😔 8h 15m
+    </button>
+
+    <!-- 8h -->
+    <button onclick="calculateOutTime(8)"
+      class="group relative h-12 rounded-2xl 
+             bg-gradient-to-br from-blue-200 to-blue-300 
+             text-blue-900 font-semibold text-sm
+             shadow-md 
+             transition-all duration-300 
+             hover:shadow-xl hover:-translate-y-1 
+             active:scale-95">
+
+      <span class="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition"></span>
+      👍 8h
+    </button>
+
+    <!-- Ramadan -->
+    <button onclick="calculateOutTime(6)"
+      class="group relative h-12 rounded-2xl 
+             bg-gradient-to-br from-emerald-400 to-green-500 
+             text-white font-bold text-sm
+             shadow-lg 
+             transition-all duration-300 
+             hover:shadow-2xl hover:-translate-y-1 
+             active:scale-95">
+
+      <span class="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition"></span>
+      🌙 Ramadan 6h
+    </button>
+
+  </div>
+
+</section>
+
 
     <!-- Extra Options -->
 <section class="rounded-lg border border-border-color bg-white/90 p-3 sm:p-4 shadow-card backdrop-blur-lg space-y-3">
