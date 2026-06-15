@@ -1,3 +1,24 @@
+// ========== FEATURE NOTICE (one-time) ==========
+
+document.addEventListener("DOMContentLoaded", function () {
+  if (!localStorage.getItem("persist-notice-v1")) {
+    const notice = document.getElementById("feature-notice");
+    if (notice) {
+      notice.style.display = "block";
+      notice.classList.add("animate-fade-in");
+    }
+  }
+});
+
+function dismissFeatureNotice() {
+  const notice = document.getElementById("feature-notice");
+  if (!notice) return;
+  notice.classList.remove("animate-fade-in");
+  notice.classList.add("animate-fade-out");
+  localStorage.setItem("persist-notice-v1", "1");
+  setTimeout(() => notice.remove(), 400);
+}
+
 // ========== COLLAPSIBLE CARDS ==========
 
 function toggleMoreShifts() {
@@ -198,23 +219,27 @@ function validateBreakTime() {
 
 
 
-// ========== ADD NEW BREAK INPUT ==========
+// ========== LOCALSTORAGE PERSISTENCE ==========
+
+function saveBreakTimes() {
+  const values = Array.from(document.querySelectorAll(".break-input")).map(i => i.value);
+  localStorage.setItem("ytc_breaks", JSON.stringify(values));
+}
+
 // ========== BREAK INPUT SYSTEM (Button + Enter + Backspace) ==========
 
 document.addEventListener("DOMContentLoaded", function () {
 
   const breakContainer = document.getElementById("break-container");
-  const addBreakBtn = document.getElementById("add-break");
+  const addBreakBtn    = document.getElementById("add-break");
 
-  // Function to attach keyboard events
   function attachInputEvents(input) {
-
-    // Validate while typing
-    input.addEventListener("input", validateBreakTime);
+    input.addEventListener("input", function () {
+      validateBreakTime();
+      saveBreakTimes();
+    });
 
     input.addEventListener("keydown", function (e) {
-
-      // 🔥 ENTER → Add new input
       if (e.key === "Enter") {
         e.preventDefault();
         const newInputGroup = createBreakInput();
@@ -222,73 +247,85 @@ document.addEventListener("DOMContentLoaded", function () {
         newInputGroup.querySelector("input").focus();
       }
 
-      // 🔥 BACKSPACE on empty → Remove input (except first)
       if (e.key === "Backspace" && input.value === "") {
         const allGroups = document.querySelectorAll(".break-time-group");
-
         if (allGroups.length > 1) {
           e.preventDefault();
-
           const group = input.closest(".break-time-group");
-          const prev = group.previousElementSibling;
-
+          const prev  = group.previousElementSibling;
           group.remove();
-
-          if (prev) {
-            const prevInput = prev.querySelector("input");
-            if (prevInput) prevInput.focus();
-          }
+          saveBreakTimes();
+          if (prev) { const p = prev.querySelector("input"); if (p) p.focus(); }
         }
       }
-
     });
   }
 
-  // Function to create new break input group
   function createBreakInput() {
-
     const breakGroup = document.createElement("div");
     breakGroup.classList.add("break-time-group", "flex", "items-center", "gap-2");
 
     const newBreakInput = document.createElement("input");
-    newBreakInput.type = "text";
+    newBreakInput.type      = "text";
     newBreakInput.className = "break-input glass-input-flex";
     newBreakInput.placeholder = "e.g. 45 or 00:45:00 or 1:30";
     newBreakInput.inputMode = "numeric";
-
     attachInputEvents(newBreakInput);
 
-    // Remove button
     const removeBtn = document.createElement("button");
     removeBtn.className = "remove-btn";
-
-    removeBtn.innerHTML =
-      '<span class="material-symbols-outlined text-base sm:text-lg">remove</span>';
-
+    removeBtn.innerHTML = '<span class="material-symbols-outlined text-base sm:text-lg">remove</span>';
     removeBtn.onclick = () => {
-      const allGroups = document.querySelectorAll(".break-time-group");
-
-      if (allGroups.length > 1) {
+      if (document.querySelectorAll(".break-time-group").length > 1) {
         breakGroup.remove();
+        saveBreakTimes();
       }
     };
 
     breakGroup.appendChild(newBreakInput);
     breakGroup.appendChild(removeBtn);
-
     return breakGroup;
   }
 
-  // Button click → Add break
   addBreakBtn.addEventListener("click", function () {
     const newInputGroup = createBreakInput();
     breakContainer.insertBefore(newInputGroup, addBreakBtn);
     newInputGroup.querySelector("input").focus();
+    saveBreakTimes();
   });
 
-  // Attach events to existing first input
-  document.querySelectorAll(".break-input").forEach(input => {
-    attachInputEvents(input);
+  document.querySelectorAll(".break-input").forEach(input => attachInputEvents(input));
+
+  // ── Restore saved values ──────────────────────────────
+
+  // In-time
+  const savedInTime = localStorage.getItem("ytc_in_time");
+  if (savedInTime) document.getElementById("in-time").value = savedInTime;
+
+  // Break times
+  try {
+    const savedBreaks = JSON.parse(localStorage.getItem("ytc_breaks") || "[]");
+    const firstInput  = document.querySelector(".break-input");
+    if (firstInput && savedBreaks[0]) firstInput.value = savedBreaks[0];
+    for (let i = 1; i < savedBreaks.length; i++) {
+      const grp = createBreakInput();
+      breakContainer.insertBefore(grp, addBreakBtn);
+      grp.querySelector("input").value = savedBreaks[i] || "";
+    }
+    // Auto-open break section if any break was saved
+    if (savedBreaks.some(v => v)) {
+      const header = document.getElementById("break-header-btn");
+      const body   = document.getElementById("break-body");
+      if (header.getAttribute("aria-expanded") === "false") {
+        header.setAttribute("aria-expanded", "true");
+        body.classList.add("open");
+      }
+    }
+  } catch (e) {}
+
+  // Save in-time on every change
+  document.getElementById("in-time").addEventListener("change", function () {
+    localStorage.setItem("ytc_in_time", this.value);
   });
 
 });

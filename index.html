@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -94,6 +94,17 @@
     </div>
   </div> -->
 
+  <!-- Feature Notice (shown once) -->
+  <div id="feature-notice" class="max-w-7xl mx-auto w-full px-5 sm:px-8 mt-3" style="display:none">
+    <div class="banner-pill">
+      <div class="flex items-center gap-2 banner-text text-xs font-medium">
+        <span class="banner-dot"></span>
+        💾 Your In Time &amp; break time are now saved automatically — they'll still be here after you refresh or close. Enjoy!
+      </div>
+      <button onclick="dismissFeatureNotice()" class="banner-close">✕</button>
+    </div>
+  </div>
+
   <!-- ─── Main ─────────────────────────────────────────── -->
   <main class="flex-grow px-5 sm:px-8 py-6 max-w-7xl mx-auto w-full">
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-5 xl:gap-7">
@@ -116,7 +127,11 @@
           <p class="field-label">In Time</p>
           <div class="relative mt-2.5">
             <span class="material-symbols-outlined field-icon">schedule</span>
-            <input type="time" id="in-time" step="1" required class="glass-input pl-11" />
+            <input type="time" id="in-time" step="1" required class="glass-input pl-11 lg:pr-28" />
+            <!-- Desktop only: text trigger -->
+            <button class="open-clock-btn hidden lg:flex" onclick="document.getElementById('in-time').showPicker()">
+              Select time
+            </button>
           </div>
         </div>
 
