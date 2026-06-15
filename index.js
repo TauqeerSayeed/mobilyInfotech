@@ -361,6 +361,13 @@ function calculateOutTime(hoursToWork) {
       </div>
     </div>
   `;
+
+  // On mobile, scroll result into view so user doesn't have to scroll manually
+  if (window.innerWidth < 1024) {
+    setTimeout(function () {
+      document.getElementById("result-section").scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 120);
+  }
 }
 
 
