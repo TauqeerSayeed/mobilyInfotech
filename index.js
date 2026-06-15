@@ -1,3 +1,99 @@
+// ========== COLLAPSIBLE CARDS ==========
+
+function toggleMoreShifts() {
+  const body    = document.getElementById("more-shifts-body");
+  const label   = document.getElementById("expand-shifts-label");
+  const chevron = document.getElementById("expand-shifts-chevron");
+  const isOpen  = body.classList.contains("open");
+  body.classList.toggle("open", !isOpen);
+  label.textContent = isOpen ? "More shifts" : "Less";
+  chevron.style.transform = isOpen ? "" : "rotate(180deg)";
+}
+
+function toggleBreakTime() {
+  const header = document.getElementById("break-header-btn");
+  const body   = document.getElementById("break-body");
+  const isOpen = header.getAttribute("aria-expanded") === "true";
+  header.setAttribute("aria-expanded", isOpen ? "false" : "true");
+  body.classList.toggle("open", !isOpen);
+}
+
+function toggleCustomCalc() {
+  const header  = document.getElementById("custom-calc-header-btn");
+  const body    = document.getElementById("custom-calc-body");
+  const presets = document.getElementById("shift-presets-card");
+  const isOpen  = header.getAttribute("aria-expanded") === "true";
+
+  header.setAttribute("aria-expanded", isOpen ? "false" : "true");
+  body.classList.toggle("open", !isOpen);
+  presets.classList.toggle("hidden-card", !isOpen);
+}
+
+// ========== HERO PHRASE ROTATION ==========
+
+document.addEventListener("DOMContentLoaded", function () {
+  const line1 = document.getElementById("hero-line1");
+  const line2 = document.getElementById("hero-phrase");
+  if (!line1 || !line2) return;
+
+  // Pairs: [first line, second line (gradient)]
+  const phrases = [
+    ["Know exactly",   "when to leave"],
+    ["Work smarter,",  "not harder"],
+    ["Own your time,", "own your day"],
+    ["Leave on time",  "every time"],
+    ["Plan smart,",    "live better"],
+  ];
+  let idx = 0;
+
+  function animOut(el, delay) {
+    setTimeout(function () {
+      el.style.opacity = "0";
+      el.style.transform = "translateY(-10px)";
+    }, delay);
+  }
+
+  function animIn(el, text, delay) {
+    setTimeout(function () {
+      el.style.transition = "none";
+      el.style.transform = "translateY(13px)";
+      el.textContent = text;
+      void el.offsetWidth; // force reflow
+      el.style.transition = "";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
+    }, delay);
+  }
+
+  function rotate() {
+    // Exit: line1 leads, line2 follows 55ms later
+    animOut(line1, 0);
+    animOut(line2, 55);
+
+    idx = (idx + 1) % phrases.length;
+
+    // Enter: after exit finishes, line1 first, line2 70ms later
+    animIn(line1, phrases[idx][0], 360);
+    animIn(line2, phrases[idx][1], 430);
+  }
+
+  // Start cycling after 2.5s, then every 3.5s
+  setTimeout(function () {
+    setInterval(rotate, 3500);
+  }, 2500);
+});
+
+
+// ========== THEME TOGGLE ==========
+
+function toggleTheme() {
+  const html  = document.documentElement;
+  const next  = html.getAttribute("data-theme") === "light" ? "dark" : "light";
+  html.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
+}
+
+
 // ========== TOASTER UI ==========
 
 // Add toast container automatically if missing
@@ -10,51 +106,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ========== ADVANCED TOP TOAST SYSTEM ==========
+// ========== TOAST SYSTEM — Glassmorphism ==========
 function showToast(message, type = "info") {
   const container = document.getElementById("toast-container");
-
-  // Clear previous toast
   container.innerHTML = "";
 
-  // Icon based on type
   const icons = {
-    success: "✔️",
-    error: "❌",
-    warning: "⚠️",
-    info: "ℹ️"
+    success: "check_circle",
+    error:   "cancel",
+    warning: "warning",
+    info:    "info"
   };
 
-  // Colors based on type
-  const bgColors = {
-    success: "bg-green-600",
-    error: "bg-red-600",
-    warning: "bg-yellow-600 text-black",
-    info: "bg-blue-600"
-  };
-
-  // Toast element
   const toast = document.createElement("div");
-  toast.className = `
-    ${bgColors[type]} 
-    flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white 
-    animate-toast-down pointer-events-auto relative w-[90%] max-w-sm
-  `;
-
+  toast.className = `glass-toast glass-toast-${type} animate-toast-down pointer-events-auto`;
   toast.innerHTML = `
-    <span class="text-xl">${icons[type]}</span>
-    <span class="text-sm font-medium flex-1">${message}</span>
-    <div class="absolute bottom-0 left-0 h-[3px] bg-white/60 animate-progress w-full"></div>
+    <span class="material-symbols-outlined glass-toast-icon">${icons[type] || icons.info}</span>
+    <span class="glass-toast-msg">${message}</span>
+    <div class="glass-toast-bar animate-progress"></div>
   `;
 
   container.appendChild(toast);
 
-  // Vibrate on mobile if supported
-  if (navigator.vibrate) {
-    navigator.vibrate(50);
-  }
+  if (navigator.vibrate) navigator.vibrate(50);
 
-  // Auto remove
   setTimeout(() => {
     toast.classList.add("animate-toast-up");
     setTimeout(() => toast.remove(), 300);
@@ -177,8 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const newBreakInput = document.createElement("input");
     newBreakInput.type = "text";
-    newBreakInput.className =
-      "break-input flex-1 rounded-lg border border-border-color bg-white px-3 py-2 sm:py-3 text-sm sm:text-base text-text-primary placeholder:text-text-secondary/70 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none";
+    newBreakInput.className = "break-input glass-input-flex";
     newBreakInput.placeholder = "e.g. 45 or 00:45:00 or 1:30";
     newBreakInput.inputMode = "numeric";
 
@@ -186,8 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Remove button
     const removeBtn = document.createElement("button");
-    removeBtn.className =
-      "remove-btn flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition";
+    removeBtn.className = "remove-btn";
 
     removeBtn.innerHTML =
       '<span class="material-symbols-outlined text-base sm:text-lg">remove</span>';
@@ -278,12 +351,13 @@ function calculateOutTime(hoursToWork) {
     `${String(outHours12).padStart(2, "0")}:${String(outMinutes).padStart(2, "0")} ${period}`;
 
   resultDiv.innerHTML = `
-    <div class="fade-card flex flex-col items-center justify-center text-center bg-white border border-slate-200 rounded-2xl p-8 shadow-card">
-      <p class="text-base font-medium text-slate-600 mb-1">Your Out-Time is</p>
-      <p class="text-5xl sm:text-6xl font-extrabold tracking-tight text-primary">${formattedOutTime}</p>
-      <div class="mt-4 rounded-full bg-primary-light px-4 py-1.5 text-sm text-primary">
-        <span>Total Break:</span>
-        <span class="font-semibold">${Math.floor(totalBreakSeconds / 60)} minutes</span>
+    <div class="result-card fade-card">
+      <div class="result-glow"></div>
+      <p class="result-eyebrow">Your Out-Time</p>
+      <p class="result-time-display">${formattedOutTime}</p>
+      <div class="result-badge">
+        <span class="material-symbols-outlined" style="font-size:13px">coffee</span>
+        Total Break: <span style="font-weight:700;margin-left:4px">${Math.floor(totalBreakSeconds / 60)} min</span>
       </div>
     </div>
   `;
