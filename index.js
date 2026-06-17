@@ -160,23 +160,83 @@ function showToast(message, type = "info") {
 
 
 // ========== HELPER: PARSE BREAK INPUT (flexible formats) ==========
+// ========== HELPER: PARSE BREAK INPUT (flexible formats) ==========
 function parseBreakToSeconds(raw) {
   if (!raw && raw !== "0") return NaN;
-  const s = String(raw).trim();
 
-  if (/^\d+$/.test(s)) return parseInt(s, 10) * 60;
+  const s = String(raw).trim().toLowerCase();
 
-  if (s.includes(":")) {
-    const parts = s.split(":").map(p => p.trim());
-    if (parts.length === 3) {
-      const [hh, mm, ss] = parts.map(Number);
-      if (hh >= 0 && mm >= 0 && mm < 60 && ss >= 0 && ss < 60)
-        return hh * 3600 + mm * 60 + ss;
-    } else if (parts.length === 2) {
-      const [hh, mm] = parts.map(Number);
-      if (hh >= 0 && mm >= 0 && mm < 60) return hh * 3600 + mm * 60;
+
+  // Normal minutes:
+  // 15 => 15 min
+  if (/^\d+$/.test(s)) {
+    return parseInt(s, 10) * 60;
+  }
+
+
+  // Company tool format:
+  // 00h 13m 09s
+  // 01h 05m 30s
+
+  if (s.includes("h") || s.includes("m") || s.includes("s")) {
+
+    const match = s.match(
+      /(?:(\d+)\s*h)?\s*(?:(\d+)\s*m)?\s*(?:(\d+)\s*s)?/
+    );
+
+    if (match) {
+      const hours = Number(match[1] || 0);
+      const minutes = Number(match[2] || 0);
+      const seconds = Number(match[3] || 0);
+
+      return (
+        hours * 3600 +
+        minutes * 60 +
+        seconds
+      );
     }
   }
+
+
+  // Existing formats:
+  // 1:30
+  // 00:45:00
+
+  if (s.includes(":")) {
+
+    const parts = s.split(":").map(Number);
+
+    if (parts.length === 3) {
+
+      const [hh, mm, ss] = parts;
+
+      if (
+        hh >= 0 &&
+        mm >= 0 &&
+        mm < 60 &&
+        ss >= 0 &&
+        ss < 60
+      ) {
+        return hh * 3600 + mm * 60 + ss;
+      }
+    }
+
+
+    if (parts.length === 2) {
+
+      const [hh, mm] = parts;
+
+      if (
+        hh >= 0 &&
+        mm >= 0 &&
+        mm < 60
+      ) {
+        return hh * 3600 + mm * 60;
+      }
+    }
+  }
+
+
   return NaN;
 }
 
@@ -204,7 +264,7 @@ function validateBreakTime() {
   });
 
   if (hasInvalid) {
-    error.textContent = "Invalid format. Use 45 or HH:mm[:ss].";
+    error.textContent = "Invalid format. Use 45, HH:mm:ss or 00h 13m 09s.";
     error.style.display = "inline";
     return false;
   } else if (totalBreakSeconds > 28800) {
@@ -268,7 +328,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const newBreakInput = document.createElement("input");
     newBreakInput.type      = "text";
     newBreakInput.className = "break-input glass-input-flex";
-    newBreakInput.placeholder = "e.g. 45 or 00:45:00 or 1:30";
+    newBreakInput.placeholder = "copy paste from akrivia also supported format: 00h 13m 09s";
     newBreakInput.inputMode = "numeric";
     attachInputEvents(newBreakInput);
 
